@@ -1,11 +1,11 @@
-# Load nice packages
+# Load packages
 library(tidyr)
 library(dplyr)
 library(tidyverse)
 library(writexl)
 
-#set working directory
-setwd('enter/your/path/where/deflated/wiots/are/saved')
+# set working directory
+setwd('enter/path/where/deflated/wiots/are/saved')
 
 # Create a vector of years from 2000 to 2014
 years <- 2000:2014
@@ -24,12 +24,12 @@ for (year in years) {
   # Filter out rows where Country is not "NLD" and use_country is not "NLD" 
   # wiot <- wiot[wiot$Country != "NLD" & wiot$use_country != "NLD", ]
   # Re-index the row names in the same way as columns
-  #wiot <- wiot %>% mutate(Code = paste(Country, RNr, sep=""))
+  # wiot <- wiot %>% mutate(Code = paste(Country, RNr, sep=""))
   
-  #Get a wide table
+  # Get a wide table
   wide_table <- wiot %>% pivot_wider(names_from = c(use_country, use_sector), values_from = value)
   
-  #Reordering columns as they are in the original WIOD tables (sectors for all countries first, followed by variables like household consumption, capital formation etc)
+  # Reordering columns as they are in the original WIOD tables (sectors for all countries first, followed by variables like household consumption, capital formation etc)
   df1 <- wide_table %>%
     select(-matches("_(57|58|59|60|61)$"))
   df2 <- wide_table %>%
@@ -38,11 +38,12 @@ for (year in years) {
   
   unwanted_cols <- c("IndustryCode", "IndustryDescription", "Country", "RNr", "Year", "TOT")
   
-  #Extracting Z (global inter industries flows), V (value added)
+  # Extracting Z (global inter industries flows), V (value added)
   Z_year <- wide_table_reordered %>% slice(1:2408) %>% select(Code, 5:2412)
   V_year <- wide_table_reordered %>% slice(2413) %>% select(Code, 5:2412)
   
-  #Extracting Y (final demand which is a sum of cons_h, 
+  # Extracting Y (final demand which is a sum of CONS_h, CONS_np, CONS_g, GFCF, INVEN columns)
+
   Y_expanded_year <- wide_table_reordered %>% slice(1:2408) %>% select(2413:2627)
   num_cols <- ncol(Y_expanded_year)
   Y_year <- data.frame(matrix(nrow = nrow(Y_expanded_year)))
