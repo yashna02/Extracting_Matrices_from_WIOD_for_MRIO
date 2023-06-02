@@ -5,7 +5,7 @@ library(tidyverse)
 library(writexl)
 
 #set working directory
-setwd('C:/Users/DELL/Desktop/IGIDR MSc/Sem 4/Thesis/R Codes/WIOTS_in_R')
+setwd('enter/your/path/where/deflated/wiots/are/saved')
 
 # Create a vector of years from 2000 to 2014
 years <- 2000:2014
@@ -20,11 +20,11 @@ for (year in years) {
   # Change to tidyr data frame type
   wiot <- data.frame(wiot) 
   
-  # Filter out rows where Country is not "NLD" and use_country is not "NLD" as dont have co2em on NLD
-  wiot <- wiot[wiot$Country != "NLD" & wiot$use_country != "NLD", ]
-  
+  #  Following step is optional - We exclude 'NLD' in our analysis as we later use this output in an environmentally extended MRIO with CO2 emissions data, but the latter does not have data on NLD
+  # Filter out rows where Country is not "NLD" and use_country is not "NLD" 
+  # wiot <- wiot[wiot$Country != "NLD" & wiot$use_country != "NLD", ]
   # Re-index the row names in the same way as columns
-  wiot <- wiot %>% mutate(Code = paste(Country, RNr, sep=""))
+  #wiot <- wiot %>% mutate(Code = paste(Country, RNr, sep=""))
   
   #Get a wide table
   wide_table <- wiot %>% pivot_wider(names_from = c(use_country, use_sector), values_from = value)
