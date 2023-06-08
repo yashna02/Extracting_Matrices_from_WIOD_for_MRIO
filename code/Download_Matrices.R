@@ -23,8 +23,9 @@ for (year in years) {
   #  Following step is optional - We exclude 'NLD' in our analysis as we later use this output in an environmentally extended MRIO with CO2 emissions data, but the latter does not have data on NLD
   # Filter out rows where Country is not "NLD" and use_country is not "NLD" 
   # wiot <- wiot[wiot$Country != "NLD" & wiot$use_country != "NLD", ]
+  
   # Re-index the row names in the same way as columns
-  # wiot <- wiot %>% mutate(Code = paste(Country, RNr, sep=""))
+  wiot <- wiot %>% mutate(Code = paste(Country, RNr, sep=""))
   
   # Get a wide table
   wide_table <- wiot %>% pivot_wider(names_from = c(use_country, use_sector), values_from = value)
